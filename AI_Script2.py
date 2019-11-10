@@ -45,7 +45,7 @@ def plot_colours(col, perm):
 dir_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(dir_path)  # Change the working directory so we can read the file
 
-ncolors, colours = read_file('colours')  # Total number of colours and list of colours
+test_size, colours = read_file('colours')  # Total number of colours and list of colours
 
 test_size = 100  # Size of the subset of colours for testing
 test_colours = colours[0:test_size]  # list of colours for testing
@@ -54,9 +54,34 @@ permutation = random.sample(range(test_size),
                             test_size)  # produces random pemutation of lenght test_size, from the numbers 0 to test_size -1
 plot_colours(test_colours, permutation)
 
+# Selects random sample from colours file within the test size specifies
+
+
+def random_solution():
+    return random.sample(range(test_size),test_size)
+
+
+def calc_distance(col1, col2):
+   r1, b1, g1 = colours[col1]
+   r2, b2, g2 = colours[col2]
+   distance = math.sqrt((r2-r1)**2 + (b2-b1)**2 + (g2-g1)**2)
+   return distance
+
+
+def evaluate(s):
+    dist = 0
+    for i in range(test_size):
+        dist = calc_distance(i, i+1)
+    return dist
+
+
+s = random_solution()
+
+
 ####______Hill Climbing______#######
+
+
 def hill_climbing():
-    s = random_solution()
     best = s
     for i in range(10000):
         best_dist = evaluate(s)
@@ -81,23 +106,39 @@ def hill_climbing():
             best = dist2
     return best
 
-# Selects random sample from colours file within the test size specifies
-def random_solution():
-    return random.sample(range(test_size),test_size)
-
-def calc_distance(col1, col2):
-   r1, b1, g1 = colours[col1]
-   r2, b2, g2 = colours[col2]
-   distance = math.sqrt((r2-r1)**2 + (b2-b1)**2 + (g2-g1)**2)
-   return distance
-
-def evaluate(s):
-    dist = 0
-    for i in range(test_size):
-        dist = calc_distance(i, i+1)
-    return dist
 
 s = hill_climbing()
 dist = evaluate(s)
 plot_colours(test_colours, s)
 print("Distance: ", dist)
+
+
+####______Greedy______#######
+
+
+# s is the random solution provided, start is the index of the starting location
+def greedy_constructive(s, start):
+    s = random_solution()
+    path = [start]
+    #shape returns demensions of colours
+    n = s.shape[0]
+    mask = np.ones(n, dtype=bool)  # boolean values of location haven't been visited
+    mask[start] = False
+
+    for i in range(n - 1):
+        last = path[-1]
+        next_ind = np.argmin(s[last][mask])  # minimum of remaining locations
+        # print('Next index: ', next_ind, ', Last: ', last, ', Mask: ', mask)
+        next_loc = np.arange(n)[mask][next_ind]  # convert to original location
+        # print('Next Loc: ', next_loc)
+        path.append(next_loc)
+        mask[next_loc] = False
+
+    return path
+
+
+plot_colours(test_colours,random_solution())
+s = greedy_constructive(s, 0)
+plot_colours(test_colours, s)
+distance = evaluate(s)
+print('Distance: ', distance)
