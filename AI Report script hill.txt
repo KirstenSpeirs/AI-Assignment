@@ -1,0 +1,10 @@
+def for_report_hill(all_solutions, best):
+    # plot list
+    plt.figure()                                    # use a line graph
+    plt.plot(all_solutions)                         # plot the stored list of distances
+    plt.savefig('plot')
+
+    # print all values
+    print(all_solutions)
+    plt2 = plot_colours(test_colours, best)
+    plt2.savefig("for_report_hill")

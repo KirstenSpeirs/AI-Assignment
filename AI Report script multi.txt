@@ -1,0 +1,38 @@
+def for_report_multi(all_solutions):
+    distances = []
+    mean_arr = []
+    median_arr = []
+
+    for i in range(len(all_solutions)):
+        distances.append(evaluate(all_solutions[i]))
+        mean_arr.append(np.mean(distances[i]))
+        median_arr.append(np.median(distances[i]))
+    mean_all = np.mean(mean_arr)
+    median_all = np.median(median_arr)
+    standard_deviation_all = np.std(distances)
+
+    # mean
+    print("Individual Means: ", mean_arr)
+    print("Total Mean of all solutions: ", mean_all)
+
+    # median
+    print("Individual Median: ", median_arr)
+    print("Total Median of all solutions", median_all)
+
+    # standard deviation
+    print("Standard deviation for all solutions", standard_deviation_all)
+
+    # best solution
+    try:
+        for i in range(len(distances)):
+            if distances[i] > distances[i+1]:
+                best = all_solutions[i+1]
+            else:
+                best = all_solutions[i]
+    except:
+        print("loop ended")
+
+    # plot best
+    print("best: ", evaluate(best))
+    plt = plot_colours(test_colours, best)
+    plt.savefig("for_report")
