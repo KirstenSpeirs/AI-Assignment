@@ -1,0 +1,72 @@
+
+#####_______Greedy Constructive_____######
+
+def lowest(start_index, colours_list):
+
+    current_lowest = math.inf
+    lowest_index = -1
+    print("lowest colour list ", colours_list)
+
+    for i in range(test_size):
+        # current = colours[i]
+        # print(start_colour)
+        # print(current)
+        print('out')
+        if i in colours_list:
+            current_dist = calc_distance(start_index, i)
+            print('in')
+
+            if current_dist < current_lowest and current_dist != 0.0:
+                print('inin')
+                current_lowest = current_dist
+                lowest_index = i
+                print("new lowest", current_lowest, "new index", lowest_index)
+    return lowest_index
+
+
+def greedy_constructive():
+    #Random starting index
+    index_list = random_solution()
+    sorted_indexs = []
+    colour_list = index_list.copy()
+    start_index = random.randint(0, test_size-1)
+    value = index_list.pop(start_index)
+    sorted_indexs.append(value)
+
+    closest = 0
+    #index_list.remove(index_list[start])
+    sorted_colours = []
+    #print(start)
+    # start_colour = index_list[start_index]
+    #print(start_colour)
+    # sorted_colours.append(start_colour)
+
+    for i in range(len(index_list)):
+        plot_colours(index_list, colour_list)
+        print("Original colour indexs: ", index_list)
+        print("Original sorted indexs: ", sorted_indexs)
+        closest = lowest(start_index, index_list)
+        # new_colour = index_list[closest]
+        # index_list.remove(closest)
+        print('start ', start_index)
+
+        sorted_indexes.append(closest)
+        # sorted_colours.append(new_colour)
+        # start_colour = new_colour
+        start_index = closest
+        print("closest", closest)
+        print('colours list: ', index_list)
+        # index_list.remove(closest)
+        s = index_list.pop(closest)
+        print('remove: ', s)
+        print('colours list: ', index_list)
+
+    return sorted_indexes
+
+
+
+sorted = greedy_constructive()
+print(sorted)
+print(len(sorted))
+print(evaluate(sorted))
+plot_colours(test_colours, sorted)
